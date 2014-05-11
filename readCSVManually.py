@@ -9,38 +9,44 @@
 # so the returned list should have 10 entries!
 import os
 import unittest
+
+
 class TestParsingFile(unittest.TestCase):
+
     def setUp(self):
         self.DATADIR = ""
         self.DATAFILE = "beatles-diskography.csv"
+        
+    def cleaning(self, datarow):
+        self.assertEqual(type(datarow), str)
+        return map(lambda x: x.strip(), datarow.split(','))
 
-    def cleaning(self,datarow):
-        self.assertEqual(type(datarow),str)
-        return map(lambda x: x.strip(),datarow.split(','))
-
-    def parse_file(self,datafile):
+    def parse_file(self, datafile):
         data = []
         with open(datafile, "rb") as f:
-            #read->split->strip
+            # read->split->strip
             a = f.readline()
-            self.assertEqual(type(a),str)
+            self.assertEqual(type(a), str)
             header = self.cleaning(a)
             for line in f:
-                data.append(dict(zip(header,self.cleaning(line))))
+                data.append(dict(zip(header, self.cleaning(line))))
         return data
 
     def test_cleaning(self):
         self.assertEqual(self.cleaning("hello,world"),
-                         ["hello","world"])
+                         ["hello", "world"])
+
     def test_reading(self):
         # a simple test of your implemetation
         datafile = os.path.join(self.DATADIR, self.DATAFILE)
         d = self.parse_file(datafile)
-        firstline = {'Title': 'Please Please Me', 'UK Chart Position': '1', 'Label': 'Parlophone(UK)', 'Released': '22 March 1963', 'US Chart Position': '-', 'RIAA Certification': 'Platinum', 'BPI Certification': 'Gold'}
-        tenthline = {'Title': '', 'UK Chart Position': '1', 'Label': 'Parlophone(UK)', 'Released': '10 July 1964', 'US Chart Position': '-', 'RIAA Certification': '', 'BPI Certification': 'Gold'}
-        self.assertEqual(d[0],firstline)
-        self.assertEqual(d[9],tenthline)
+        firstline = {'Title': 'Please Please Me', 'UK Chart Position': '1', 'Label':
+                     'Parlophone(UK)', 'Released': '22 March 1963', 'US Chart Position': '-', 'RIAA Certification': 'Platinum', 'BPI Certification': 'Gold'}
+        tenthline = {'Title': '', 'UK Chart Position': '1', 'Label':
+                     'Parlophone(UK)', 'Released': '10 July 1964', 'US Chart Position': '-', 'RIAA Certification': '', 'BPI Certification': 'Gold'}
+        self.assertEqual(d[0], firstline)
+        self.assertEqual(d[9], tenthline)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     unittest.main()
