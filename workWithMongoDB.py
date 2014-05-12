@@ -25,6 +25,8 @@ def command(db):
     db.autos.find({'manufacturer_label':'Porsche'}).count()
     db.autos.find({"productionEndYear":{"$gte":datetime.datetime(1800,1,1,0,0,0)}}).count()
     db.autos.find({"class_label":{"$regex":"sport"}})
+    db.autos.find({"class_label":{"$in":["sport","car"]}})
+
 
 if __name__ == "__main__":
 
