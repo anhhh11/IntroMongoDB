@@ -12,6 +12,7 @@ and uncomment the get_db function.
 """
 "Regrex"
 "http://regexpal.com/"
+"RoboMongo"
 import datetime
 def get_db():
     from pymongo import MongoClient
@@ -21,13 +22,38 @@ def get_db():
     return db
 
 def command(db):
+    #Insert
     db.autos.insert({"name" : "Car"})
+    #Equal condition == where ..=...
     db.autos.find({'manufacturer_label':'Porsche'}).count()
+    #Comparastion == where ... >= ...
     db.autos.find({"productionEndYear":{"$gte":datetime.datetime(1800,1,1,0,0,0)}}).count()
+    #Pattern == like ...
     db.autos.find({"class_label":{"$regex":"sport"}})
+    #Range == in (.... , ... )
     db.autos.find({"class_label":{"$in":["sport","car"]}})
-
-
+    #All == all ( ..... )
+    db.autos.find({"class_label":{"$all":[1891,1895,1990]}})
+    #Dot == join + where
+    db.autos.find({"dimensions.width":{"$gt":2.5}})
+    #Save == insert into
+    a = db.autos.find_one({"class_label":"Sports car"})
+    a["designer"] = "MODIFIED DESIGNER"
+    db.autos.save(a)
+    #Update == update .. set .. where
+    condition = {"rdf-schema#label" : "Mazda MX-5"}
+    set = {"$set":{"width":300},"$unset":{"height":""}}
+    db.autos.update(condition,set)
+    #Multiple update
+    condition = {"class_label" : {"$regex":"sport"}}
+    set = {"$set":{"width":150},"$unset":{"height":""}}
+    db.autos.update(condition,set,multi=True)
+    #Delete == delete from ... where ...
+    condition = {"class_label" : {"$regex":"sport"}}
+    db.autos.remove(condition)
+    #Find document not have `super car` tag
+    condition = {"super car" : {"$exists": 0}}
+    db.autos.find(condition)
 if __name__ == "__main__":
 
     db = get_db() # uncomment this line if you want to run this locally
