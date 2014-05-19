@@ -16,7 +16,7 @@ class TestParsingFile(unittest.TestCase):
     def setUp(self):
         self.DATADIR = ""
         self.DATAFILE = "beatles-diskography.csv"
-        
+
     def cleaning(self, datarow):
         self.assertEqual(type(datarow), str)
         return map(lambda x: x.strip(), datarow.split(','))

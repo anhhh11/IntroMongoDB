@@ -18,11 +18,13 @@ def get_db():
     from pymongo import MongoClient
     client = MongoClient('mongodb://localhost:27017')
     # 'examples' here is the database name. It will be created if it does not exist.
+    #import data
+# mongoimport --host localhost --port 27017--type csv --headerline --collection autos < ~/Desktop/autos.csv --db examples
     db = client.examples
     return db
 
 def command(db):
-    #Insert
+    #Inserw
     db.autos.insert({"name" : "Car"})
     #Equal condition == where ..=...
     db.autos.find({'manufacturer_label':'Porsche'}).count()
